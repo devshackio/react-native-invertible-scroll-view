@@ -21,11 +21,13 @@ let InvertibleScrollView = React.createClass({
     ...ScrollView.propTypes,
     inverted: PropTypes.bool,
     renderScrollComponent: PropTypes.func.isRequired,
+    focusOn: PropTypes.number
   },
 
   getDefaultProps(): DefaultProps {
     return {
       renderScrollComponent: props => <ScrollView {...props} />,
+      onCellLayout: () => {}
     };
   },
 
@@ -60,8 +62,8 @@ let InvertibleScrollView = React.createClass({
   },
 
   _renderInvertedChildren(children, inversionStyle) {
-    return React.Children.map(children, child => {
-      return child ? <View style={inversionStyle}>{child}</View> : child;
+    return React.Children.map(children, (child, idx) => {
+      return child ? <View style={inversionStyle} onLayout={ev => this.props.onCellLayout(idx, ev.nativeEvent.layout)}>{child}</View> : child;
     });
   },
 });
