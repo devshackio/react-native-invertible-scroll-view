@@ -68,36 +68,35 @@ let InvertibleScrollView = createReactClass({
   },
 });
 
-const verticalTransform = [
-    { scaleY: -1 },
-];
-
-const horizontalTransform = [
-    { scaleX: -1 },
-];
-
 // Added fix to Android 7.0.0 (mostly Huawei phones)
 // https://github.com/expo/react-native-invertible-scroll-view/pull/46
-// This should be fixed in RN 0.48
-
-if (Platform.OS === 'android') {
-  verticalTransform.push({
-      perspective: 1280,
-  });
-  horizontalTransform.push({
-      perspective: 1280,
-  });
-}
+// This should be fixed in RN 0.48 and thus this fork should no longer be used.
 
 let styles = StyleSheet.create({
-  verticallyInverted: {
-    flex: 1,
-    transform: verticalTransform,
-  },
-  horizontallyInverted: {
-    flex: 1,
-    transform: horizontalTransform,
-  },
+    verticallyInverted: Platform.select({
+        ios: {
+            flex: 1,
+            transform: [
+                { scaleY: -1 },
+            ],
+        },
+        android: {
+            flex: 1,
+            scaleY: -1,
+        },
+    }),
+    horizontallyInverted: Platform.select({
+        ios: {
+            flex: 1,
+            transform: [
+                { scaleX: -1 },
+            ],
+        },
+        android: {
+            flex: 1,
+            scaleX: -1,
+        },
+    }),
 });
 
 module.exports = InvertibleScrollView;
